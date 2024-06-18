@@ -3,7 +3,7 @@ import pandas as pd
 import json
 from datetime import datetime
 import plotly.graph_objs as go
-from langchain_community.llms import Ollama
+# from langchain_community.llms import Ollama
 
 # List of cryptocurrency symbols and their corresponding JSON file names
 symbols = {
@@ -57,13 +57,13 @@ def resample_data(df, interval):
         }).reset_index().sort_values(by='time', ascending=False)
 
 # Function for Fundamental Analysis using Ollama
-def evaluate_test_scenarios_by_llama3(symbol):
-    llama3_llm = Ollama(model="llama3")
-    evaluate_test_scenarios = f"""
-    Give me information about {symbol.upper()} from 2021-01-01 to nowadays.
-    """
-    results = llama3_llm.invoke(evaluate_test_scenarios)
-    return results
+# def evaluate_test_scenarios_by_llama3(symbol):
+#    llama3_llm = Ollama(model="llama3")
+#    evaluate_test_scenarios = f"""
+#    Give me information about {symbol.upper()} from 2021-01-01 to nowadays.
+#    """
+#    results = llama3_llm.invoke(evaluate_test_scenarios)
+#    return results
 
 # Streamlit app
 st.title('Cryptocurrency Historical Data')
