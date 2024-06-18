@@ -3,19 +3,22 @@ import pandas as pd
 import json
 from datetime import datetime
 import plotly.graph_objs as go
-# from langchain_community.llms import Ollama
+import os
+
+# Dinamik dosya yolları için base directory belirleyin
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # List of cryptocurrency symbols and their corresponding JSON file names
 symbols = {
-    'avax': '../json_data/avax.json',
-    'bnb': '../json_data/bnb.json',
-    'btc': '../json_data/btc.json',
-    'doge': '../json_data/doge.json',
-    'eth': '../json_data/eth.json',
-    'shib': '../json_data/shib.json',
-    'sol': '../json_data/sol.json',
-    'trx': '../json_data/trx.json',
-    'usdt': '../json_data/usdt.json'
+    'Bitcoin (BTC)': os.path.join(current_dir, 'json_data', 'btc.json'),
+    'Ethereum (ETH)': os.path.join(current_dir, 'json_data', 'eth.json'),
+    'Tether (USDT)': os.path.join(current_dir, 'json_data', 'usdt.json'),
+    'Binance Coin (BNB)': os.path.join(current_dir, 'json_data', 'bnb.json'),
+    'Solana (SOL)': os.path.join(current_dir, 'json_data', 'sol.json'),
+    'Avalanche (AVAX)': os.path.join(current_dir, 'json_data', 'avax.json'),
+    'Dogecoin (DOGE)': os.path.join(current_dir, 'json_data', 'doge.json'),
+    'Shiba Inu (SHIB)': os.path.join(current_dir, 'json_data', 'shib.json'),
+    'TRON (TRX)': os.path.join(current_dir, 'json_data', 'trx.json'),    
 }
 
 # Function to load historical data from JSON file
@@ -47,7 +50,7 @@ def resample_data(df, interval):
             'volumeto': 'sum'
         }).reset_index().sort_values(by='time', ascending=False)
     elif interval == 'Monthly':
-        return df.resample('M', on='time').agg({
+        return df.resample('ME', on='time').agg({
             'high': 'max',
             'low': 'min',
             'open': 'first',
@@ -66,7 +69,7 @@ def resample_data(df, interval):
 #    return results
 
 # Streamlit app
-st.title('Cryptocurrency Historical Data')
+st.title('CERES')
 
 # Combobox for selecting cryptocurrency
 selected_symbol = st.selectbox('Select Cryptocurrency', list(symbols.keys()))
@@ -77,8 +80,8 @@ with col1:
     show_graphic = st.button('Show Graphic')
 with col2:
     show_history = st.button('History')
-with col3:
-    show_fundamental = st.button('Fundamental Analysis')
+# with col3:
+#     show_fundamental = st.button('Fundamental Analysis')
 
 # Load data based on selected symbol
 df = load_data(selected_symbol)
@@ -118,7 +121,7 @@ elif show_history:
     st.write(f'Historical Data ({selected_symbol.upper()}, {interval}):')
     st.dataframe(resampled_data[['time', 'high', 'high_change', 'low', 'low_change']].style.applymap(color_change, subset=['high_change', 'low_change']))
 
-elif show_fundamental:
-    st.write("Fundamental Analysis:")
-    results = evaluate_test_scenarios_by_llama3(selected_symbol)
-    st.write(results)
+# elif show_fundamental:
+#     st.write("Fundamental Analysis:")
+#     results = evaluate_test_scenarios_by_llama3(selected_symbol)
+#     st.write(results)
